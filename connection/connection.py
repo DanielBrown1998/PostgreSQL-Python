@@ -126,3 +126,13 @@ if __name__ == "__main__":
         order by count(c.nome) desc;
         """
     )
+    Connection.execute_sql(
+        """
+        select c.nome , count(ac.aluno_id) from curso as c 
+        join aluno_curso as ac on c.id = ac.curso_id 
+        group by c.nome
+        order by 2 desc;
+        """
+    )
+
+    
