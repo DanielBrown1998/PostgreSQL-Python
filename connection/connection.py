@@ -36,7 +36,6 @@ class Connection:
                 for item in data:
                     cursor.execute(sql, item)
                     print(sql, *cursor.fetchone(), sep='\n')
-
             else:
                 cursor.execute(sql)
                 print(sql, *cursor.fetchall(), sep='\n')
@@ -69,14 +68,61 @@ class Connection:
 
 if __name__ == "__main__":
 
-    # alunos = [
-    #     ('Dayse', 'Brown', '1975-07-30'),
-    #     ('Marcelo', 'Baptista', '1971-04-19'),
-    #     ('Joao', 'Rodrigues', '1998-08-13')
-    # ]
+    alunos = [
+        ('Dayse', 'Brown', '1975-07-30'),
+        ('Marcelo', 'Baptista', '1971-04-19'),
+        ('Joao', 'Rodrigues', '1998-08-13')
+    ]
     # Connection.insert_sql('aluno', ('primeiro_nome', 'ultimo_nome', 'data_nascimento'), alunos)
 
-    Connection.execute_sql("SELECT * FROM aluno")
-    Connection.execute_sql("SELECT * FROM curso")
-    Connection.execute_sql("SELECT * FROM aluno_curso")
-    Connection.execute_sql("SELECT * FROM categoria")
+
+    categoria = [
+        ("Dev. Web", ),
+        ("Dev. Mobile", ),
+        ("Banco de Dados", )
+    ]
+    # Connection.insert_sql('categoria', ('nome',), categoria)
+
+
+    cursos = [
+        ('Python', 3),
+        ('Flutter', 2),
+        ('JavaScript', 1)
+    ]
+    # Connection.insert_sql('curso', ('nome', 'categoria_id'), cursos)
+
+
+    aluno_curso = [
+        (1, 2),
+        (1, 3),
+        (2, 3),
+        (2, 1),
+        (59, 2),
+        (59, 1),
+        (60, 2),
+        (60, 1),
+        (60, 3),
+        (61, 2)
+    ]
+    # Connection.insert_sql('aluno_curso', ("aluno_id", "curso_id"), aluno_curso)
+
+    # Connection.execute_sql("SELECT * FROM aluno")
+    # Connection.execute_sql("SELECT * FROM curso")
+    # Connection.execute_sql("SELECT * FROM aluno_curso")
+    # Connection.execute_sql("SELECT * FROM categoria")
+    
+    Connection.execute_sql(
+        """select a.primeiro_nome, c.nome, cat.nome from aluno as a 
+        join aluno_curso as ac on ac.aluno_id = a.id 
+        join curso as c on c.id = ac.curso_id 
+        join categoria as cat on cat.id = c.categoria_id;
+        """
+    )
+    Connection.execute_sql(
+        """select a.primeiro_nome, count(c.nome) from aluno as a 
+        join aluno_curso as ac on ac.aluno_id = a.id 
+        join curso as c on c.id = ac.curso_id 
+        group by a.primeiro_nome
+        order by count(c.nome) desc;
+        """
+    )
