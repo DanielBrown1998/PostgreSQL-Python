@@ -25,6 +25,7 @@ class Connection:
         if connection:
             connection.close()
             print("Conexão com o PostgreSQL fechada")
+            print("-*-"*25)
 
     @staticmethod
     def execute_sql(sql: str, data: Iterable[Iterable] = None) -> None:
@@ -112,14 +113,16 @@ if __name__ == "__main__":
     # Connection.execute_sql("SELECT * FROM categoria")
     
     Connection.execute_sql(
-        """select a.primeiro_nome, c.nome, cat.nome from aluno as a 
+        """
+        select a.primeiro_nome, c.nome, cat.nome from aluno as a 
         join aluno_curso as ac on ac.aluno_id = a.id 
         join curso as c on c.id = ac.curso_id 
         join categoria as cat on cat.id = c.categoria_id;
         """
     )
     Connection.execute_sql(
-        """select a.primeiro_nome, count(c.nome) from aluno as a 
+        """
+        select a.primeiro_nome, count(c.nome) from aluno as a 
         join aluno_curso as ac on ac.aluno_id = a.id 
         join curso as c on c.id = ac.curso_id 
         group by a.primeiro_nome
@@ -135,4 +138,8 @@ if __name__ == "__main__":
         """
     )
 
-    
+    Connection.execute_sql(
+        """
+select * from curso where categoria_id in (1);
+"""
+    )
